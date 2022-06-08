@@ -30,7 +30,7 @@ jest.mock('@actions/io', () => ({
 jest.mock('../src/execute', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
-  execute: jest.fn()
+  execute: jest.fn(() => ({stdout: '', stderr: ''}))
 }))
 
 describe('git', () => {
@@ -55,7 +55,7 @@ describe('git', () => {
       })
 
       await init(action)
-      expect(execute).toBeCalledTimes(6)
+      expect(execute).toBeCalledTimes(7)
     })
 
     it('should catch when a function throws an error', async () => {
@@ -102,7 +102,7 @@ describe('git', () => {
       })
 
       await init(action)
-      expect(execute).toBeCalledTimes(6)
+      expect(execute).toBeCalledTimes(7)
     })
 
     it('should not unset git config if a user is using ssh', async () => {
@@ -124,7 +124,7 @@ describe('git', () => {
       })
 
       await init(action)
-      expect(execute).toBeCalledTimes(5)
+      expect(execute).toBeCalledTimes(6)
 
       process.env.CI = undefined
     })
@@ -145,7 +145,7 @@ describe('git', () => {
       })
 
       await init(action)
-      expect(execute).toBeCalledTimes(6)
+      expect(execute).toBeCalledTimes(7)
     })
   })
 
@@ -168,7 +168,7 @@ describe('git', () => {
       const response = await deploy(action)
 
       // Includes the call to generateWorktree
-      expect(execute).toBeCalledTimes(13)
+      expect(execute).toBeCalledTimes(14)
       expect(rmRF).toBeCalledTimes(1)
       expect(response).toBe(Status.SUCCESS)
     })
@@ -191,7 +191,7 @@ describe('git', () => {
       const response = await deploy(action)
 
       // Includes the call to generateWorktree
-      expect(execute).toBeCalledTimes(12)
+      expect(execute).toBeCalledTimes(13)
       expect(rmRF).toBeCalledTimes(1)
       expect(response).toBe(Status.SUCCESS)
     })
@@ -216,7 +216,7 @@ describe('git', () => {
       await deploy(action)
 
       // Includes the call to generateWorktree
-      expect(execute).toBeCalledTimes(13)
+      expect(execute).toBeCalledTimes(14)
       expect(rmRF).toBeCalledTimes(1)
     })
 
@@ -240,7 +240,7 @@ describe('git', () => {
       await deploy(action)
 
       // Includes the call to generateWorktree
-      expect(execute).toBeCalledTimes(12)
+      expect(execute).toBeCalledTimes(13)
       expect(rmRF).toBeCalledTimes(1)
     })
 
@@ -265,7 +265,7 @@ describe('git', () => {
       await deploy(action)
 
       // Includes the call to generateWorktree
-      expect(execute).toBeCalledTimes(12)
+      expect(execute).toBeCalledTimes(13)
       expect(rmRF).toBeCalledTimes(1)
     })
 
@@ -296,7 +296,7 @@ describe('git', () => {
       const response = await deploy(action)
 
       // Includes the call to generateWorktree
-      expect(execute).toBeCalledTimes(13)
+      expect(execute).toBeCalledTimes(14)
       expect(rmRF).toBeCalledTimes(1)
       expect(fs.existsSync).toBeCalledTimes(2)
       expect(response).toBe(Status.SUCCESS)
@@ -328,7 +328,7 @@ describe('git', () => {
         await deploy(action)
 
         // Includes the call to generateWorktree
-        expect(execute).toBeCalledTimes(10)
+        expect(execute).toBeCalledTimes(11)
         expect(rmRF).toBeCalledTimes(1)
       })
     })
@@ -353,7 +353,7 @@ describe('git', () => {
       await deploy(action)
 
       // Includes the call to generateWorktree
-      expect(execute).toBeCalledTimes(10)
+      expect(execute).toBeCalledTimes(11)
       expect(rmRF).toBeCalledTimes(1)
     })
 
@@ -373,7 +373,7 @@ describe('git', () => {
 
       await deploy(action)
 
-      expect(execute).toBeCalledTimes(10)
+      expect(execute).toBeCalledTimes(11)
       expect(rmRF).toBeCalledTimes(1)
       expect(mkdirP).toBeCalledTimes(1)
     })
@@ -393,7 +393,7 @@ describe('git', () => {
       })
 
       const response = await deploy(action)
-      expect(execute).toBeCalledTimes(10)
+      expect(execute).toBeCalledTimes(11)
       expect(rmRF).toBeCalledTimes(1)
       expect(response).toBe(Status.SKIPPED)
     })
@@ -421,6 +421,31 @@ describe('git', () => {
       } catch (error) {
         expect(error instanceof Error && error.message).toBe(
           'The deploy step encountered an error: Mocked throw ❌'
+        )
+      }
+    })
+
+    it('should execute commands if force is false and retry until limit is exceeded', async () => {
+      Object.assign(action, {
+        hostname: 'github.com',
+        silent: false,
+        folder: 'assets',
+        branch: 'branch',
+        force: false,
+        token: '123',
+        repositoryName: 'JamesIves/montezuma',
+        pusher: {
+          name: 'asd',
+          email: 'as@cat'
+        },
+        isTest: TestFlag.HAS_CHANGED_FILES
+      })
+
+      try {
+        await deploy(action)
+      } catch (error) {
+        expect(error instanceof Error && error.message).toBe(
+          'The deploy step encountered an error: Attempt limit exceeded ❌'
         )
       }
     })
