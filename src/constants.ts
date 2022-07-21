@@ -58,12 +58,14 @@ export interface ActionInterface {
   tokenType?: string
   /** The folder where your deployment project lives. */
   workspace: string
+  /** GitHub tag name */
+  tag?: string | null
 }
 
 /** The minimum required values to run the action as a node module. */
 export interface NodeActionInterface {
   /** The branch that the action should deploy to. */
-  branch: string
+  branch?: string
   /** The folder to deploy. */
   folder: string
   /** The repository path, for example JamesIves/github-pages-deploy-action. */
@@ -138,7 +140,8 @@ export const action: ActionInterface = {
     ? true
     : getInput('ssh-key'),
   targetFolder: getInput('target-folder'),
-  workspace: process.env.GITHUB_WORKSPACE || ''
+  workspace: process.env.GITHUB_WORKSPACE || '',
+  tag: getInput('tag')
 }
 
 /** Types for the required action parameters. */
