@@ -47,7 +47,7 @@
 </p>
 
 <p align="center">
-<!-- sponsors --><a href="https://github.com/Chooksta69"><img src="https://github.com/Chooksta69.png" width="50px" alt="Chooksta69" /></a>&nbsp;&nbsp;<a href="https://github.com/robjtede"><img src="https://github.com/robjtede.png" width="50px" alt="robjtede" /></a>&nbsp;&nbsp;<a href="https://github.com/hadley"><img src="https://github.com/hadley.png" width="50px" alt="hadley" /></a>&nbsp;&nbsp;<a href="https://github.com/kevinchalet"><img src="https://github.com/kevinchalet.png" width="50px" alt="kevinchalet" /></a>&nbsp;&nbsp;<!-- sponsors -->
+<!-- sponsors --><a href="https://github.com/Chooksta69"><img src="https://github.com/Chooksta69.png" width="50px" alt="Chooksta69" /></a>&nbsp;&nbsp;<a href="https://github.com/robjtede"><img src="https://github.com/robjtede.png" width="50px" alt="robjtede" /></a>&nbsp;&nbsp;<a href="https://github.com/hadley"><img src="https://github.com/hadley.png" width="50px" alt="hadley" /></a>&nbsp;&nbsp;<a href="https://github.com/kevinchalet"><img src="https://github.com/kevinchalet.png" width="50px" alt="kevinchalet" /></a>&nbsp;&nbsp;<a href="https://github.com/annegentle"><img src="https://github.com/annegentle.png" width="50px" alt="annegentle" /></a>&nbsp;&nbsp;<a href="https://github.com/planetoftheweb"><img src="https://github.com/planetoftheweb.png" width="50px" alt="planetoftheweb" /></a>&nbsp;&nbsp;<!-- sponsors -->
 </p>
 
 ## Getting Started :airplane:
@@ -90,7 +90,7 @@ on:
 ```
 
 > **Warning**
-> If you do not supply the action with an access token or an SSH key, you must access your repositories settings and provide `Read and Write Permissions` to the provided `GITHUB_TOKEN`, otherwise you'll potentailly run into permission issues. Alternatively you can set the following in your workflow file to grant the action the permissions it needs.
+> If you do not supply the action with an access token or an SSH key, you must access your repositories settings and provide `Read and Write Permissions` to the provided `GITHUB_TOKEN`, otherwise you'll potentially run into permission issues. Alternatively you can set the following in your workflow file to grant the action the permissions it needs.
 
 ```yml
 permissions:
@@ -132,7 +132,6 @@ By default, the action does not need any token configuration and uses the provid
 | `single-commit`    | This option can be toggled to `true` if you'd prefer to have a single commit on the deployment branch instead of maintaining the full history. **Using this option will also cause any existing history to be wiped from the deployment branch**.                                                                                                                           | `with` | **No**   |
 | `force`            | Force-push new deployments to overwrite the previous version; otherwise, attempt to rebase new deployments onto any existing ones. This option is turned on by default and can be toggled off by setting it to `false`, which may be useful if there are multiple deployments in a single branch.                                                                           | `with` | **No**   |
 | `silent`           | Silences the action output preventing it from displaying git messages.                                                                                                                                                                                                                                                                                                      | `with` | **No**   |
-| `workspace`        | This should point to where your project lives on the virtual machine. The GitHub Actions environment will set this for you. It is only necessary to set this variable if you're using the node module.                                                                                                                                                                      | `with` | **No**   |
 | `tag`              | Add a tag to the commit. Only works when `dry-run` is not used.                                                                                                                                                                                                                                                                                                             | `with` | **No**   |
 
 With the action correctly configured you should see the workflow trigger the deployment under the configured conditions.
